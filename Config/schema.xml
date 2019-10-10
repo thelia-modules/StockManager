@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database defaultIdMethod="native" name="thelia"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../vendor/thelia/propel/resources/xsd/database.xsd" >
+
+    <table name="stock_operation" namespace="StockManager\Model">
+        <column autoIncrement="true" name="id" primaryKey="true" required="true" type="INTEGER" />
+        <column name="operation" size="25" type="VARCHAR" />
+        <behavior name="timestampable" />
+    </table>
+
+    <table name="stock_operation_source_status" namespace="StockManager\Model">
+        <column name="stock_operation_id" primaryKey="true" type="INTEGER" />
+        <column name="source_status_id" primaryKey="true" type="INTEGER" />
+        <foreign-key foreignTable="stock_operation" name="fk_stock_operation_source_status_so" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="stock_operation_id" />
+        </foreign-key>
+        <foreign-key foreignTable="order_status" name="fk_stock_operation_source_status_os" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="source_status_id" />
+        </foreign-key>
+    </table>
+    <table name="stock_operation_target_status" namespace="StockManager\Model">
+        <column name="stock_operation_id" primaryKey="true" type="INTEGER" />
+        <column name="target_status_id" primaryKey="true" type="INTEGER" />
+        <foreign-key foreignTable="stock_operation" name="fk_stock_operation_target_status_so" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="stock_operation_id" />
+        </foreign-key>
+        <foreign-key foreignTable="order_status" name="fk_stock_operation_target_status_os" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="target_status_id" />
+        </foreign-key>
+    </table>
+
+    <table name="stock_operation_payment_module" namespace="StockManager\Model">
+        <column name="stock_operation_id" primaryKey="true" type="INTEGER" />
+        <column name="payment_module_id" primaryKey="true" type="INTEGER" />
+        <foreign-key foreignTable="stock_operation" name="fk_stock_operation_payment_module_so" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="stock_operation_id" />
+        </foreign-key>
+        <foreign-key foreignTable="module" name="fk_stock_operation_payment_module_m" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="payment_module_id" />
+        </foreign-key>
+    </table>
+    <table name="stock_operation_delivery_module" namespace="StockManager\Model">
+        <column name="stock_operation_id" primaryKey="true" type="INTEGER" />
+        <column name="delivery_module_id" primaryKey="true" type="INTEGER" />
+        <foreign-key foreignTable="stock_operation" name="fk_stock_operation_delivery_module_so" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="stock_operation_id" />
+        </foreign-key>
+        <foreign-key foreignTable="module" name="fk_stock_operation_delivery_module_m" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="delivery_module_id" />
+        </foreign-key>
+    </table>
+
+    <external-schema filename="local/config/schema.xml" referenceOnly="true" />
+</database>
