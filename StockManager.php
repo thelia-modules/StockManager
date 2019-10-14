@@ -12,6 +12,8 @@
 
 namespace StockManager;
 
+use Propel\Runtime\Connection\ConnectionInterface;
+use Thelia\Install\Database;
 use Thelia\Module\BaseModule;
 
 class StockManager extends BaseModule
@@ -21,10 +23,16 @@ class StockManager extends BaseModule
 
     const DECREMENT_STOCK_MODULE_CONFIG_KEY = "decrement_stock_modules";
 
-    /*
-     * You may now override BaseModuleInterface methods, such as:
-     * install, destroy, preActivation, postActivation, preDeactivation, postDeactivation
-     *
-     * Have fun !
-     */
+    public function preActivation(ConnectionInterface $con = null)
+    {
+        if (!$this->getConfigValue('is_initialized', false)) {
+            $database = new Database($con);
+
+            $database->insertSql(null, array(__DIR__ . '/Config/thelia.sql'));
+
+            $this->setConfigValue('is_initialized', true);
+        }
+
+        return true;
+    }
 }
