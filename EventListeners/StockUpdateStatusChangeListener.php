@@ -4,6 +4,7 @@ namespace StockManager\EventListeners;
 
 use StockManager\Model\StockOperationQuery;
 use StockManager\StockManager;
+use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Thelia\Action\BaseAction;
@@ -36,8 +37,13 @@ class StockUpdateStatusChangeListener extends BaseAction implements EventSubscri
         return $events;
     }
 
-    public function isStockDecrementOnOrderCreation(ManageStockOnCreationEvent $event)
+    public function isStockDecrementOnOrderCreation(Event $event)
     {
+        // Prevent error for Thelia < 2.4
+        if (!$event instanceof ManageStockOnCreationEvent) {
+            return;
+        }
+
         $paymentModule = $event->getModule();
 
         $event->setManageStock(
