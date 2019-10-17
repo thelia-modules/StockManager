@@ -51,7 +51,7 @@ class StockUpdateStatusChangeListener extends BaseAction implements EventSubscri
                 $paymentModule->getModuleModel()->getId(),
                 explode(
                     ',',
-                    StockManager::getConfigValue(StockManager::DECREMENT_STOCK_MODULE_CONFIG_KEY, [])
+                    StockManager::getConfigValue(StockManager::DECREMENT_STOCK_MODULE_CONFIG_KEY, "")
                 )
             )
         );
