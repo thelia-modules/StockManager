@@ -12,6 +12,7 @@ use Thelia\Core\Event\Order\GetStockUpdateOperationOnOrderStatusChangeEvent;
 use Thelia\Core\Event\Payment\ManageStockOnCreationEvent;
 use Thelia\Core\Event\TheliaEvents;
 use Thelia\Model\ModuleQuery;
+use Thelia\Module\BaseModule;
 
 class StockUpdateStatusChangeListener extends BaseAction implements EventSubscriberInterface
 {
@@ -23,7 +24,7 @@ class StockUpdateStatusChangeListener extends BaseAction implements EventSubscri
         $events = [TheliaEvents::ORDER_GET_STOCK_UPDATE_OPERATION_ON_ORDER_STATUS_CHANGE => [ "getStockOperationOnOrderStatusChange", 256 ]];
 
         $paymentModules = ModuleQuery::create()
-            ->findByCategory('payment');
+            ->findByType(BaseModule::PAYMENT_MODULE_TYPE);
 
         foreach ($paymentModules as $paymentModule) {
             $eventName = TheliaEvents::getModuleEvent(
