@@ -57,7 +57,7 @@ class StockOperationController extends BaseAdminController
         $messages = MessageQuery::create()
             ->find();
 
-        $decrementStockConfig = explode(',', StockManager::getConfigValue(StockManager::DECREMENT_STOCK_MODULE_CONFIG_KEY, []));
+        $decrementStockConfig = explode(',', StockManager::getConfigValue(StockManager::DECREMENT_STOCK_MODULE_CONFIG_KEY, ""));
 
         return $this->render(
             "stock-manager/stock-operations",
