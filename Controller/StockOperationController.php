@@ -49,10 +49,12 @@ class StockOperationController extends BaseAdminController
 
         $orderStatuses = $orderStatusQuery->find();
 
+        /** @var ModuleQuery $paymentModules : Type 3 = payment */
         $paymentModules = ModuleQuery::create()
-            ->findByCategory('payment');
+            ->findByType('3');
+        /** @var ModuleQuery $deliveryModules : Type 3 = delivery */
         $deliveryModules = ModuleQuery::create()
-            ->findByCategory('delivery');
+            ->findByType('2');
 
         $messages = MessageQuery::create()
             ->find();
