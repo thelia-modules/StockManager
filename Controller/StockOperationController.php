@@ -52,7 +52,7 @@ class StockOperationController extends BaseAdminController
         /** @var ModuleQuery $paymentModules : Type 3 = payment */
         $paymentModules = ModuleQuery::create()
             ->findByType('3');
-        /** @var ModuleQuery $deliveryModules : Type 3 = delivery */
+        /** @var ModuleQuery $deliveryModules : Type 2 = delivery */
         $deliveryModules = ModuleQuery::create()
             ->findByType('2');
 
