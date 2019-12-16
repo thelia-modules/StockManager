@@ -18,6 +18,7 @@ use Thelia\Model\MessageQuery;
 use Thelia\Model\ModuleQuery;
 use Thelia\Model\OrderStatusQuery;
 use Thelia\Model\Tools\ModelCriteriaTools;
+use Thelia\Module\BaseModule;
 
 class StockOperationController extends BaseAdminController
 {
@@ -49,10 +50,12 @@ class StockOperationController extends BaseAdminController
 
         $orderStatuses = $orderStatusQuery->find();
 
+        /** @var ModuleQuery $paymentModules : Type 3 = payment */
         $paymentModules = ModuleQuery::create()
-            ->findByCategory('payment');
+            ->findByType(BaseModule::PAYMENT_MODULE_TYPE);
+        /** @var ModuleQuery $deliveryModules : Type 3 = delivery */
         $deliveryModules = ModuleQuery::create()
-            ->findByCategory('delivery');
+            ->findByType(BaseModule::DELIVERY_MODULE_TYPE);
 
         $messages = MessageQuery::create()
             ->find();
