@@ -2,20 +2,11 @@
 
 namespace StockManager\Form;
 
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Thelia\Form\BaseForm;
 
 class StockOperationForm extends BaseForm
 {
-    /**
-     * @return string the name of you form. This name must be unique
-     */
-    public function getName()
-    {
-        return 'stock_manager_stock_operation';
-    }
-
     /**
      *
      * in this function you add all the fields you need for your Form.
