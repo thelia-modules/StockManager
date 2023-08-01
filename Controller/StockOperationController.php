@@ -2,31 +2,35 @@
 
 namespace StockManager\Controller;
 
+use Exception;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Exception\PropelException;
+use StockManager\Form\StockOperationDeleteForm;
+use StockManager\Form\StockOperationForm;
 use StockManager\Model\StockOperation;
 use StockManager\Model\StockOperationDeliveryModule;
 use StockManager\Model\StockOperationPaymentModule;
 use StockManager\Model\StockOperationQuery;
 use StockManager\Model\StockOperationSourceStatus;
-use StockManager\Model\StockOperationSourceStatusQuery;
 use StockManager\Model\StockOperationTargetStatus;
 use StockManager\StockManager;
+use Symfony\Component\Routing\Annotation\Route;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\HttpFoundation\Response;
+use Thelia\Core\HttpFoundation\Session\Session;
 use Thelia\Core\Security\AccessManager;
+use Thelia\Core\Translation\Translator;
 use Thelia\Model\MessageQuery;
 use Thelia\Model\ModuleQuery;
 use Thelia\Model\OrderStatusQuery;
 use Thelia\Model\Tools\ModelCriteriaTools;
 use Thelia\Module\BaseModule;
 
+#[Route('/admin/module/StockManager', name: 'stock_manager_stock_operation')]
 class StockOperationController extends BaseAdminController
 {
-    /**
-     * @param array $params
-     * @return Response
-     */
-    public function viewAction($params = array())
+    #[Route('/StockOperation', name: 'view', methods: 'GET')]
+    public function viewAction(Session $session): Response
     {
         if (null !== $response = $this->checkAuth(array(), 'StockManager', AccessManager::VIEW)) {
             return $response;
@@ -39,9 +43,9 @@ class StockOperationController extends BaseAdminController
 
         ModelCriteriaTools::getI18n(
             true,
-            $this->getSession()->getLang()->getId(),
+            $session->getLang()->getId(),
             $orderStatusQuery,
-            $this->getSession()->getLang()->getLocale(),
+            $session->getLang()->getLocale(),
             ['title'],
             null,
             'id',
@@ -75,16 +79,17 @@ class StockOperationController extends BaseAdminController
         );
     }
 
-    public function addAction()
+    #[Route('/StockOperation', name: 'add', methods: 'POST')]
+    public function addAction(Session $session)
     {
         if (null !== $response = $this->checkAuth(array(), 'StockManager', AccessManager::UPDATE)) {
             return $response;
         }
 
-        $addForm = $this->createForm('stock_manager_stock_operation');
+        $addForm = $this->createForm(StockOperationForm::getName());
 
         try {
-            $form = $this->validateForm($addForm, "POST");
+            $form = $this->validateForm($addForm);
 
             // Get the form field values
             $data = $form->getData();
@@ -97,23 +102,24 @@ class StockOperationController extends BaseAdminController
             $this->setStockOperationRelations($stockOperation, $data);
 
             return $this->generateSuccessRedirect($addForm);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->setupFormErrorContext(
-                $this->getTranslator()->trans("Stock operations"),
+                Translator::getInstance()->trans("Stock operations"),
                 $e->getMessage(),
                 $addForm
             );
-            return $this->viewAction();
+            return $this->viewAction($session);
         }
     }
 
-    public function updateAction($id)
+    #[Route('/StockOperation/update/{id}', name: 'update', methods: 'POST')]
+    public function updateAction(Session $session, $id)
     {
         if (null !== $response = $this->checkAuth(array(), 'StockManager', AccessManager::UPDATE)) {
             return $response;
         }
 
-        $updateForm = $this->createForm('stock_manager_stock_operation');
+        $updateForm = $this->createForm(StockOperationForm::getName());
 
         try {
             $form = $this->validateForm($updateForm, "POST");
@@ -145,23 +151,24 @@ class StockOperationController extends BaseAdminController
             $this->setStockOperationRelations($stockOperation, $data);
 
             return $this->generateSuccessRedirect($updateForm);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->setupFormErrorContext(
-                $this->getTranslator()->trans("Stock operations"),
+                Translator::getInstance()->trans("Stock operations"),
                 $e->getMessage(),
                 $updateForm
             );
-            return $this->viewAction();
+            return $this->viewAction($session);
         }
     }
 
-    public function deleteAction()
+    #[Route('/StockOperation/delete', name: 'delete', methods: 'POST')]
+    public function deleteAction(Session $session)
     {
         if (null !== $response = $this->checkAuth(array(), 'StockManager', AccessManager::UPDATE)) {
             return $response;
         }
 
-        $deleteForm = $this->createForm('stock_manager_stock_operation_delete');
+        $deleteForm = $this->createForm(StockOperationDeleteForm::getName());
 
         try {
             $form = $this->validateForm($deleteForm, "POST");
@@ -175,16 +182,19 @@ class StockOperationController extends BaseAdminController
             $stockOperation->delete();
 
             return $this->generateSuccessRedirect($deleteForm);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->setupFormErrorContext(
-                $this->getTranslator()->trans("Stock operations"),
+                Translator::getInstance()->trans("Stock operations"),
                 $e->getMessage(),
                 $deleteForm
             );
-            return $this->viewAction();
+            return $this->viewAction($session);
         }
     }
 
+    /**
+     * @throws PropelException
+     */
     protected function setStockOperationRelations($stockOperation, $data)
     {
         // STATUSES

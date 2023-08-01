@@ -15,7 +15,7 @@ On Thelia >= 2.4.0  You can also choose what to do on order creation for each pa
 * Add it in your main thelia composer.json file
 
 ```
-composer require thelia/stock-manager-module:~1.0.0
+composer require thelia/stock-manager-module:~2.0.0
 ```
 * Activate it in your thelia administration panel
 

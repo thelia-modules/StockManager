@@ -19,8 +19,12 @@
             </ul>
             <div class="row">
                 <div class="col-md-12 general-block-decorator">
-                    {form name="order_creation_configuration"}
+                    {form name="stockmanager_form_order_creation_configuration_form"}
                         <form class="form-inline" action="{url path="/admin/module/StockManager/OrderCreationConfiguration"}" method="post">
+
+                            {render_form_field field="success_url" value={url path='/admin/module/StockManager/StockOperation'}}
+                            {render_form_field field="error_url" value={url path='/admin/module/StockManager/StockOperation'}}
+
                             {form_hidden_fields form=$form}
 
                             {if $form_error}
@@ -37,9 +41,9 @@
 
                             {foreach from=$paymentModules item=paymentModule}
                                 <div class="form-group col-xs-3">
-                                    {form_field form=$form field='decrementStockModules'}
+                                    {form_field form=$form field=$paymentModule->getCode()}
                                         <label class="control-label" for="{$paymentModule->getId()}">{$paymentModule->getCode()}</label>
-                                        <input id="{$paymentModule->getId()}" class="form-control" type="checkbox" name="{$name}[]" value="{$paymentModule->getId()}"
+                                        <input id="{$paymentModule->getId()}" class="form-control" type="checkbox" name="{$name}" value="{$paymentModule->getId()}"
                                            {if in_array($paymentModule->getId(), $decrementStockConfig)}
                                                checked
                                            {/if}
@@ -57,7 +61,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12 general-block-decorator">
-                    {form name="stock_manager_stock_operation"}
+                    {form name="stockmanager_form_stock_operation_form"}
                         <form  method="POST" action="{url path="/admin/module/StockManager/StockOperation"}">
                             {form_hidden_fields form=$form}
 
@@ -72,7 +76,7 @@
                             {form_field form=$form field='source_statuses'}
                                 <div class="form-group col-xs-6">
                                     <label class="control-label" for="{$name}">{intl l="Source status" d="stockmanager.bo.default"}</label>
-                                    <select name="{$name}[]" class="form-control" multiple>
+                                    <select name="{$name}" class="form-control" multiple>
                                         {foreach from=$orderStatuses item=orderStatus}
                                             <option value="{$orderStatus->getId()}">{$orderStatus->getVirtualColumn('i18n_TITLE')}</option>
                                         {/foreach}
@@ -83,7 +87,7 @@
                             {form_field form=$form field='target_statuses'}
                                 <div class="form-group col-xs-6">
                                     <label for="{$name}">{intl l="Target status" d="stockmanager.bo.default"}</label>
-                                    <select name="{$name}[]" class="form-control" multiple>
+                                    <select name="{$name}" class="form-control" multiple>
                                         {foreach from=$orderStatuses item=orderStatus}
                                             <option value="{$orderStatus->getId()}">{$orderStatus->getVirtualColumn('i18n_TITLE')}</option>
                                         {/foreach}
@@ -95,7 +99,7 @@
                             {form_field form=$form field='payment_modules'}
                                 <div class="form-group col-xs-6">
                                     <label for="{$name}">{intl l="Payment module" d="stockmanager.bo.default"}</label>
-                                    <select name="{$name}[]" class="form-control" multiple>
+                                    <select name="{$name}" class="form-control" multiple>
                                         {foreach from=$paymentModules item=paymentModule}
                                             <option value="{$paymentModule->getId()}">{$paymentModule->getCode()}</option>
                                         {/foreach}
@@ -106,7 +110,7 @@
                             {form_field form=$form field='delivery_modules'}
                                 <div class="form-group col-xs-6">
                                     <label for="{$name}">{intl l="Delivery module" d="stockmanager.bo.default"}</label>
-                                    <select name="{$name}[]" class="form-control" multiple>
+                                    <select name="{$name}" class="form-control" multiple>
                                         {foreach from=$deliveryModules item=deliveryModule}
                                             <option value="{$deliveryModule->getId()}">{$deliveryModule->getCode()}</option>
                                         {/foreach}
@@ -136,7 +140,7 @@
                 {foreach from=$stockOperations item=stockOperation}
                     <div class="col-md-12 general-block-decorator">
                         #{$stockOperation->getId()}
-                        {form name="stock_manager_stock_operation"}
+                        {form name="stockmanager_form_stock_operation_form"}
                             <form  method="POST" action="{url path="/admin/module/StockManager/StockOperation/update/%stockOperationId" stockOperationId=$stockOperation->getId()}">
                                 {form_hidden_fields form=$form}
 
@@ -151,7 +155,7 @@
                                 {form_field form=$form field='source_statuses'}
                                     <div class="form-group col-xs-6">
                                         <label class="control-label" for="{$name}">{intl l="Source status" d="stockmanager.bo.default"}</label>
-                                        <select name="{$name}[]" class="form-control" multiple >
+                                        <select name="{$name}" class="form-control" multiple >
                                             {foreach from=$orderStatuses item=orderStatus}
                                                 <option value="{$orderStatus->getId()}"
                                                         {if array_key_exists($orderStatus->getId(), $stockOperation->getStockOperationSourceStatuses()->toKeyValue('SourceStatusId'))}selected{/if}
@@ -166,7 +170,7 @@
                                 {form_field form=$form field='target_statuses'}
                                     <div class="form-group col-xs-6">
                                         <label for="{$name}">{intl l="Target status" d="stockmanager.bo.default"}</label>
-                                        <select name="{$name}[]" class="form-control" multiple>
+                                        <select name="{$name}" class="form-control" multiple>
                                             {foreach from=$orderStatuses item=orderStatus}
                                                 <option value="{$orderStatus->getId()}"
                                                         {if array_key_exists($orderStatus->getId(), $stockOperation->getStockOperationTargetStatuses()->toKeyValue('TargetStatusId'))}selected{/if}
@@ -182,7 +186,7 @@
                                 {form_field form=$form field='payment_modules'}
                                     <div class="form-group col-xs-6">
                                         <label for="{$name}">{intl l="Payment module" d="stockmanager.bo.default"}</label>
-                                        <select name="{$name}[]" class="form-control" multiple>
+                                        <select name="{$name}" class="form-control" multiple>
                                             {foreach from=$paymentModules item=paymentModule}
                                                 <option value="{$paymentModule->getId()}"
                                                    {if array_key_exists($paymentModule->getId(), $stockOperation->getStockOperationPaymentModules()->toKeyValue('PaymentModuleId'))}selected{/if}
@@ -197,7 +201,7 @@
                                 {form_field form=$form field='delivery_modules'}
                                     <div class="form-group col-xs-6">
                                         <label for="{$name}">{intl l="Delivery module" d="stockmanager.bo.default"}</label>
-                                        <select name="{$name}[]" class="form-control" multiple>
+                                        <select name="{$name}" class="form-control" multiple>
                                             {foreach from=$deliveryModules item=deliveryModule}
                                                 <option value="{$deliveryModule->getId()}"
                                                    {if array_key_exists($deliveryModule->getId(), $stockOperation->getStockOperationDeliveryModules()->toKeyValue('DeliveryModuleId'))}selected{/if}
@@ -227,7 +231,7 @@
                                 </div>
                             </form>
                         {/form}
-                        {form name="stock_manager_stock_operation_delete"}
+                        {form name="stockmanager_form_stock_operation_delete_form"}
                             <form  method="POST" action="{url path="/admin/module/StockManager/StockOperation/delete" stockOperationId=$stockOperation->getId()}">
                                 {form_hidden_fields form=$form}
 

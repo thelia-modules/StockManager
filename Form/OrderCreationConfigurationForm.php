@@ -2,19 +2,14 @@
 
 namespace StockManager\Form;
 
+use StockManager\StockManager;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Thelia\Form\BaseForm;
+use Thelia\Model\ModuleQuery;
 
 class OrderCreationConfigurationForm extends BaseForm
 {
-    /**
-     * @return string the name of you form. This name must be unique
-     */
-    public function getName()
-    {
-        return 'order_creation_configuration';
-    }
-
     /**
      *
      * in this function you add all the fields you need for your Form.
@@ -23,7 +18,16 @@ class OrderCreationConfigurationForm extends BaseForm
      */
     protected function buildForm()
     {
-        $this->formBuilder
-            ->add('decrementStockModules', TextType::class);
+        $ModuleList = (new ModuleQuery)->filterByType('3')->find();
+
+        foreach ($ModuleList as $module)
+        {
+            $this->formBuilder
+                ->add(
+                    $module->getCode(),
+                    TextType::class,
+                    []
+                );
+        }
     }
 }

@@ -29,7 +29,7 @@ CREATE TABLE `stock_operation_source_status`
     `stock_operation_id` INTEGER NOT NULL,
     `source_status_id` INTEGER NOT NULL,
     PRIMARY KEY (`stock_operation_id`,`source_status_id`),
-    INDEX `FI_stock_operation_source_status_os` (`source_status_id`),
+    INDEX `fi_stock_operation_source_status_os` (`source_status_id`),
     CONSTRAINT `fk_stock_operation_source_status_so`
         FOREIGN KEY (`stock_operation_id`)
         REFERENCES `stock_operation` (`id`)
@@ -53,7 +53,7 @@ CREATE TABLE `stock_operation_target_status`
     `stock_operation_id` INTEGER NOT NULL,
     `target_status_id` INTEGER NOT NULL,
     PRIMARY KEY (`stock_operation_id`,`target_status_id`),
-    INDEX `FI_stock_operation_target_status_os` (`target_status_id`),
+    INDEX `fi_stock_operation_target_status_os` (`target_status_id`),
     CONSTRAINT `fk_stock_operation_target_status_so`
         FOREIGN KEY (`stock_operation_id`)
         REFERENCES `stock_operation` (`id`)
@@ -77,7 +77,7 @@ CREATE TABLE `stock_operation_payment_module`
     `stock_operation_id` INTEGER NOT NULL,
     `payment_module_id` INTEGER NOT NULL,
     PRIMARY KEY (`stock_operation_id`,`payment_module_id`),
-    INDEX `FI_stock_operation_payment_module_m` (`payment_module_id`),
+    INDEX `fi_stock_operation_payment_module_m` (`payment_module_id`),
     CONSTRAINT `fk_stock_operation_payment_module_so`
         FOREIGN KEY (`stock_operation_id`)
         REFERENCES `stock_operation` (`id`)
@@ -101,7 +101,7 @@ CREATE TABLE `stock_operation_delivery_module`
     `stock_operation_id` INTEGER NOT NULL,
     `delivery_module_id` INTEGER NOT NULL,
     PRIMARY KEY (`stock_operation_id`,`delivery_module_id`),
-    INDEX `FI_stock_operation_delivery_module_m` (`delivery_module_id`),
+    INDEX `fi_stock_operation_delivery_module_m` (`delivery_module_id`),
     CONSTRAINT `fk_stock_operation_delivery_module_so`
         FOREIGN KEY (`stock_operation_id`)
         REFERENCES `stock_operation` (`id`)
