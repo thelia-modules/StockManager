@@ -38,13 +38,8 @@ class StockUpdateStatusChangeListener extends BaseAction implements EventSubscri
         return $events;
     }
 
-    public function isStockDecrementOnOrderCreation(Event $event)
+    public function isStockDecrementOnOrderCreation(ManageStockOnCreationEvent $event)
     {
-        // Prevent error for Thelia < 2.4
-        if (!$event instanceof ManageStockOnCreationEvent) {
-            return;
-        }
-
         $paymentModule = $event->getModule();
 
         $event->setManageStock(
