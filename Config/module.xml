@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module xmlns="http://thelia.net/schema/dic/module"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://thelia.net/schema/dic/module http://thelia.net/schema/dic/module/module-2_2.xsd">
+        xsi:schemaLocation="http://thelia.net/schema/dic/module http://thelia.net/schema/dic/module/module-2_1.xsd">
     <fullnamespace>StockManager\StockManager</fullnamespace>
     <descriptive locale="en_US">
-        <title>Choose stock actions to do when an order status change</title>
+        <title>Stock rules on order status changes</title>
     </descriptive>
     <descriptive locale="fr_FR">
-        <title>Définissez les actions de stock à effectuer quand une commande change de statut</title>
+        <title>Règles de stock sur les changements de statut de commande</title>
     </descriptive>
     <languages>
         <language>en_US</language>
         <language>fr_FR</language>
     </languages>
-    <version>2.0.1</version>
-    <authors>
-        <author>
-            <name>Vincent Lopes-Vicente</name>
-            <email>vlopes@openstudio.fr</email>
-        </author>
-    </authors>
+    <version>3.0.0</version>
+    <author>
+        <name>Vincent Lopes-Vicente</name>
+        <email>vlopes@openstudio.fr</email>
+    </author>
     <type>classic</type>
-    <thelia>2.5.0</thelia>
-    <stability>other</stability>
-    <mandatory>0</mandatory>
-    <hidden>0</hidden>
+    <thelia>3.2.0</thelia>
+    <stability>prod</stability>
 </module>
